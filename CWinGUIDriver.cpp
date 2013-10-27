@@ -11,35 +11,24 @@ General Public License for more details.  
 You should have received a copy of the GNU General Public License along with this program; if not,
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
-#ifndef __D_CDREAMDEVICE_H
-#define __D_CDREAMDEVICE_H
-#include "IReferenceCounted.h"
-#include "IVideoDriver.h"
-class IDreamDevice:public IReferenceCounted {
-public:
-	typedef enum {
-		DEVICE_WIN32,DEVICE_LINUX
-	} DEVICE_TYPE;
-public:
-	IDreamDevice(DEVICE_TYPE type) {
-		m_DeviceType = type;
-		m_videoDriver = NULL;
-	}
-	virtual ~IDreamDevice() {
-		if(m_videoDriver != NULL ) {
-			m_videoDriver->drop();
-			m_videoDriver = NULL;
-		}
-	}
-	DEVICE_TYPE getDeviceType() const {
-		return m_DeviceType;
-	}
-	virtual void showVersion() const = 0;
-	virtual char* getVersionString() const = 0;
-	virtual s32 run() = 0;
-private:
-	DEVICE_TYPE m_DeviceType;
-	IVideoDriver* m_videoDriver;
-};
+#include "CWinGUIDriver.h"
+#ifdef DREAM2D_WIN32
+void CWinGUIDriver::BeginScene() {
 
+}
+void CWinGUIDriver::EndScene() {
+
+
+}
+u32 CWinGUIDriver::DrawPic() {
+
+
+}
+u32 CWinGUIDriver::DrawText() {
+
+}
+
+u32 CWinGUIDriver::initBackBuffer(COLOR_FORMAT f) {
+
+}
 #endif

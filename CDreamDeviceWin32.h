@@ -18,11 +18,12 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #ifdef DREAM2D_WIN32
 class CDreamDeviceWin32 :public IDreamDevice {
 public:
-	CDreamDeviceWin32(u32 uWidth = 640,u32 uHeight = 480):IDreamDevice(DEVICE_WIN32) {
+	CDreamDeviceWin32(DRIVER_TYPE driver,u32 uWidth = 640,u32 uHeight = 480):IDreamDevice(DEVICE_WIN32) {
 		m_Width = uWidth;
 		m_Height = uHeight;
 		m_hInstance = GetModuleHandle(0);
 		InitWin32Device();
+		initDriver(driver);
 	}
 	virtual ~CDreamDeviceWin32() {
 
@@ -33,6 +34,7 @@ public:
 	virtual char* getVersionString() const {
 		return "Dream2d Win32 0.1";
 	}
+	void initDriver(DRIVER_TYPE driver,COLOR_FORMAT f);
 	void InitWin32Device();
 	virtual s32 run();
 private:

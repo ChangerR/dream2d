@@ -11,35 +11,29 @@ General Public License for more details.  
 You should have received a copy of the GNU General Public License along with this program; if not,
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
-#ifndef __D_CDREAMDEVICE_H
-#define __D_CDREAMDEVICE_H
-#include "IReferenceCounted.h"
+#ifndef __D_DREAM2D_WINGUI_DRIVER
+#define __D_DREAM2D_WINGUI_DRIVER
 #include "IVideoDriver.h"
-class IDreamDevice:public IReferenceCounted {
+#ifdef DREAM2D_WIN32
+#include <Windows.h>
+class CWinGUIDriver:public IVideoDriver {
 public:
-	typedef enum {
-		DEVICE_WIN32,DEVICE_LINUX
-	} DEVICE_TYPE;
-public:
-	IDreamDevice(DEVICE_TYPE type) {
-		m_DeviceType = type;
-		m_videoDriver = NULL;
+	CWinGUIDriver(HWND hwnd,COLOR_FORMAT f) {
+		m_hWnd = hwnd;
+		initBackBuffer(f);
 	}
-	virtual ~IDreamDevice() {
-		if(m_videoDriver != NULL ) {
-			m_videoDriver->drop();
-			m_videoDriver = NULL;
-		}
+	
+	virtual ~CWinGUIDriver() {
+	
 	}
-	DEVICE_TYPE getDeviceType() const {
-		return m_DeviceType;
-	}
-	virtual void showVersion() const = 0;
-	virtual char* getVersionString() const = 0;
-	virtual s32 run() = 0;
+	void BeginScene();
+	void EndScene();
+	u32 DrawPic();
+	u32 DrawText();
+	u32 initBackBuffer(COLOR_FORMAT f);
 private:
-	DEVICE_TYPE m_DeviceType;
-	IVideoDriver* m_videoDriver;
+	ICavans* m_Canvans;
+	HWND m_hWnd;
 };
-
+#endif
 #endif

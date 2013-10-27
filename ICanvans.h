@@ -11,35 +11,22 @@ General Public License for more details.  
 You should have received a copy of the GNU General Public License along with this program; if not,
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
-#ifndef __D_CDREAMDEVICE_H
-#define __D_CDREAMDEVICE_H
-#include "IReferenceCounted.h"
-#include "IVideoDriver.h"
-class IDreamDevice:public IReferenceCounted {
+#ifndef __D_DREAM2D_CANVANS
+#define __D_DREAM2D_CANVANS
+class ICanvans:public IReferenceCounter{
 public:
-	typedef enum {
-		DEVICE_WIN32,DEVICE_LINUX
-	} DEVICE_TYPE;
+	ICanvans() {
+		m_Width = 0;
+		u_Height = 0;
+		m_pitch = 0;
+	}
+	virtual ~ICanvans() {
+	
+	}
+	void* lock() = 0;
+	void unlock() = 0;
 public:
-	IDreamDevice(DEVICE_TYPE type) {
-		m_DeviceType = type;
-		m_videoDriver = NULL;
-	}
-	virtual ~IDreamDevice() {
-		if(m_videoDriver != NULL ) {
-			m_videoDriver->drop();
-			m_videoDriver = NULL;
-		}
-	}
-	DEVICE_TYPE getDeviceType() const {
-		return m_DeviceType;
-	}
-	virtual void showVersion() const = 0;
-	virtual char* getVersionString() const = 0;
-	virtual s32 run() = 0;
-private:
-	DEVICE_TYPE m_DeviceType;
-	IVideoDriver* m_videoDriver;
+	u32 m_Width,u_Height;
+	u32 m_pitch;
 };
-
 #endif

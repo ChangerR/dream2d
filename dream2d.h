@@ -17,11 +17,11 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 
 #ifdef BUILD_DLL
 extern "C" {
-	__declspec(dllexport)	IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight);
+	__declspec(dllexport) IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f);
 };
 #else
 extern "C" {
-	__declspec(dllimport) IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight);
+	__declspec(dllimport) IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f);
 };
 #endif
 

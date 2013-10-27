@@ -14,18 +14,20 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #include "dream2d.h"
 #ifdef DREAM2D_WIN32
 #include "CDreamDeviceWin32.h"
-CDreamDeviceWin32* createDeviceWin32(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight) {
+CDreamDeviceWin32* createDeviceWin32(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f) {
 	CDreamDeviceWin32* pDevice = new CDreamDeviceWin32(uWidth,uHeight);
+	pDevice->initDriver(driver_type,f);
 	return pDevice;
 }
 #else
-IDreamDevice* createDeviceWin32(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight) {
+IDreamDevice* createDeviceWin32(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f) {
 	return (IDreamDevice*)0;
 }
 #endif
 
-IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight) {
+IDreamDevice* createDevice(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f) {
 	#ifdef DREAM2D_WIN32
-		return createDeviceWin32(DRIVER_GUIWIN32,uWidth,uHeight);
+		return createDeviceWin32(driver_type,uWidth,uHeight,f);
 	#endif
+	return NULL;
 }

@@ -15,6 +15,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #include <Windows.h>
 #include <tchar.h>
 #include "CDreamDeviceWin32.h"
+#include "CWinGUIDriver.h"
 #define WINDOWS_CLASS_NAME _T("DREAM2D")
 LRESULT CALLBACK WindowProc(
     HWND hwnd, UINT uMsg,WPARAM wParam,  LPARAM lParam ) {
@@ -81,5 +82,22 @@ s32 CDreamDeviceWin32::run() {
 		DispatchMessage(&msg);
 	}
 	return 1;
+}
+
+void CDreamDeviceWin32::initDriver(DRIVER_TYPE driver,COLOR_FORMAT f) {
+	switch(driver) {
+		case DRIVER_GUIWIN32:
+			m_videoDriver = new CWinGUIDriver(f);
+			break;
+		case DRIVER_OPENGL:
+			m_videoDriver = NULL;
+			break;
+		case DRIVER_DIRECT9:
+			m_videoDriver = NULL;
+			break;
+		case DRIVER_DDRAW:
+			m_videoDriver = NULL;
+			break;
+	}
 }
 #endif
