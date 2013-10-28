@@ -14,25 +14,27 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #ifndef __D_DREAM2D_WINGUI_DRIVER
 #define __D_DREAM2D_WINGUI_DRIVER
 #include "IVideoDriver.h"
+#include "CHMemdcCanvans.h"
 #ifdef DREAM2D_WIN32
 #include <Windows.h>
 class CWinGUIDriver:public IVideoDriver {
 public:
-	CWinGUIDriver(HWND hwnd,COLOR_FORMAT f) {
+	CWinGUIDriver(HWND hwnd,s32 sWidth,s32 sHeight) {
 		m_hWnd = hwnd;
-		initBackBuffer(f);
+		m_Canvans = new CHMemdcCanvans(hwnd,sWidth,sHeight);
 	}
 	
 	virtual ~CWinGUIDriver() {
-	
+		m_Canvans->drop();
+		m_Canvans = NULL;
 	}
-	void BeginScene();
+	void BeginScene(d_bool clearScreen);
 	void EndScene();
-	u32 DrawPic();
-	u32 DrawText();
-	u32 initBackBuffer(COLOR_FORMAT f);
+	u32 DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel);
+	u32 DrawTextW(wchar_t* text,int x0,int y0);
+	u32 DrawTextA(char* text,int x0,int y0);
 private:
-	ICavans* m_Canvans;
+	CHMemdcCancans* m_Canvans;
 	HWND m_hWnd;
 };
 #endif

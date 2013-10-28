@@ -13,22 +13,29 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #include "CWinGUIDriver.h"
 #ifdef DREAM2D_WIN32
-void CWinGUIDriver::BeginScene() {
-
+void CWinGUIDriver::BeginScene(d_bool clearScreen) {
+	if(clearScreen == d_false) 
+		return;
+	u8* buf = m_Canvans->lock();
+	for(int i = 0;i < m_Canvans->m_Hieght;i++) {
+		memset(buf,0xff,m_Canvans->m_pitch > 0?m_Canvans->m_pitch:-m_Canvans->m_pitch);
+		buf+=m_Canvans->m_pitch;
+	}
+	m_Canvans->unlock();
 }
 void CWinGUIDriver::EndScene() {
-
-
+	HDC hdc = GetDC(m_hWnd);
+	BitBlt(hdc,0,0,m_Canvans->m_Width,m_Canvans->m_Height,m_Canvans->getMemDc(),0,0,SRCCOPY);
+	ReleaseDC(m_hWnd,hdc);
 }
-u32 CWinGUIDriver::DrawPic() {
-
-
+u32 CWinGUIDriver::DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) {	
+	return m_Canvans->CopyCanvans(x0,y0,sWidth,sHeight,source,sx0,sy0,sel);
 }
-u32 CWinGUIDriver::DrawText() {
-
+u32 DrawTextW(wchar_t* text,int x0,int y0) {
+	return !TextOutW(m_Canvans->getMemDc(),x0,y0,text,wcslen(text);
+}
+u32 DrawTextA(char* text,int x0,int y0) {
+	return !TextOutA(m_Canvans->getMemDc(),x0,y0,text,wcslen(text);
 }
 
-u32 CWinGUIDriver::initBackBuffer(COLOR_FORMAT f) {
-
-}
 #endif

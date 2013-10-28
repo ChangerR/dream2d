@@ -11,43 +11,52 @@ General Public License for more details.  
 You should have received a copy of the GNU General Public License along with this program; if not,
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
-#ifndef __I_DREAM2D_CONFIGH
-#define __I_DREAM2D_CONFIGH
-typedef unsigned char u8;
-typedef char s8;
-typedef unsigned short u16;
-typedef short s16;
-typedef unsigned int u32;
-typedef int s32;
-typedef float f32;
-typedef double f64;
-typedef enum {
-	d_false,d_true
-} d_bool;
-typedef enum {
-	DRIVER_GUIWIN32,
-	DRIVER_OPENGL,
-	DRIVER_DIRECT9,
-	DRIVER_DDRAW
-} DRIVER_TYPE;
-typedef enum {
-	COLOR_A8R8G8B8,
-	COLOR_INDEX8,
-	COLOR_A1R5G5B5,
-	COLOR_R5G6B5,
-	COLOR_R8G8B8
-}COLOR_FORMAT;
-typedef sturct {
-	union {
-		struct {
-			u8 a,r,g,b;
-		};
-		u32 argb;
-		u32 M[4];
-	};
-}color32;
-#include <stdlib.h>
-#include <tchar.h>
-#include <string.h>
-#include <stdio.h>
+#ifndef __D_DREAM2D_CMEMORYCANVANS
+#define __D_DREAM2D_CMEMORYCANVANS
+#include "ICanvans.h"
+class CMemoryCanvans :public ICanvans {
+public:
+	CMemoryCanvans(s32 uWidth,s32 uHeight,COLOR_FORMAT f):ICanvans(f) {
+		int bitCount;
+		switch(f) {
+		case COLOR_A8R8G8B8:
+			bitCount = 32;
+			break;
+		case COLOR_INDEX8:
+			bitCount = 8;
+			break;
+		case COLOR_A1R5G5B5:
+		case COLOR_R5G6B5:
+			bitCount = 16;
+			break;
+		}
+		m_pitch = (uWidth*bitCount +31)>>5;
+		m_Width = uWidth;
+		m_Height = uHeight;
+		m_pallet = NULL;
+		m_buffer = new u8[m_pitch*uHeight];
+		if(bitCount == 8) {
+			m_pallet = new u32[256];
+		}
+	}
+	virtual ~CMemoryCanvans() {
+		if(m_buffer) {
+			delete[] m_buffer;
+			m_buffer = NULL;
+		}
+		if(m_pallet) {
+			delete[] m_pallet;
+			m_pallet = NULL;
+		} 		
+	}
+	u8* lock()  {
+		return m_buffer;
+	}
+	void unlock() {
+	
+	}
+private:
+	u8* m_buffer;
+	u32* m_pallet;
+};
 #endif

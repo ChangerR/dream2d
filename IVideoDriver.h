@@ -15,6 +15,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #define __D_DREAM2D_VIDEODRIVER
 #include "IReferenceCounter.h"
 #include "IFont.h"
+#include "ICanvnas.h"
 class IVideoDriver:public IReferenceCounter {
 public:
 	IVideoDriver() {
@@ -27,10 +28,11 @@ public:
 			m_font = NULL;
 		}
 	}
-	virtual void BeginScene() = 0;
+	virtual void BeginScene(d_bool clearScreen) = 0;
 	virtual void EndScene() = 0;
-	virtual u32 DrawPic() = 0;
-	virtual u32 DrawText() = 0;
+	virtual u32 DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) = 0;
+	virtual u32 DrawTextW(wchar_t* text,int x0,int y0) = 0;
+	virtual u32 DrawTextA(char* text,int x0,int y0) = 0;
 	IFont* getFont() const {
 		return m_font;
 	}
