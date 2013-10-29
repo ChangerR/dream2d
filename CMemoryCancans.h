@@ -30,7 +30,7 @@ public:
 			bitCount = 16;
 			break;
 		}
-		m_pitch = (uWidth*bitCount +31)>>5;
+		m_pitch = ((uWidth*bitCount +31)>>5)<<2;
 		m_Width = uWidth;
 		m_Height = uHeight;
 		m_pallet = NULL;
@@ -54,6 +54,12 @@ public:
 	}
 	void unlock() {
 	
+	}
+	CANVANS_TYPE getCanvansType() const {
+		return CANVANS_MEMORY;
+	}
+	u32* getPallet() const{
+		return NULL;
 	}
 private:
 	u8* m_buffer;

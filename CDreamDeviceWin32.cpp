@@ -84,10 +84,10 @@ s32 CDreamDeviceWin32::run() {
 	return 1;
 }
 
-void CDreamDeviceWin32::initDriver(DRIVER_TYPE driver,COLOR_FORMAT f) {
+void CDreamDeviceWin32::initDriver(s32 sWidth,s32 sHeight,DRIVER_TYPE driver,COLOR_FORMAT f) {
 	switch(driver) {
 		case DRIVER_GUIWIN32:
-			m_videoDriver = new CWinGUIDriver(f);
+			m_videoDriver = new CWinGUIDriver(m_hWnd,sWidth,sHeight);
 			break;
 		case DRIVER_OPENGL:
 			m_videoDriver = NULL;

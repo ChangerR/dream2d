@@ -13,20 +13,13 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #ifndef __D_DREAM2D_CANVANS
 #define __D_DREAM2D_CANVANS
-#include "IReferenceCounter.h"
-typedef enum {
-	COPY_USE_SOURCE_KEY,
-	COPY_USE_DEST_KEY,
-	COPY_USE_ALPHA_NORMAL,
-	COPY_USE_ALPHA_SOURCEKEY,
-	COPY_USE_ALPHA_DESKKEY,
-	COPY_NORMAL
-}COPY_SELECTION;
-class ICanvans:public IReferenceCounter{
+#include "IReferenceCounted.h"
+
+class ICanvans:public IReferenceCounted{
 public:
 	ICanvans(COLOR_FORMAT f) {
 		m_Width = 0;
-		u_Height = 0;
+		m_Height = 0;
 		m_pitch = 0;
 		m_Format = f;
 		m_colorkey = 0;
@@ -38,6 +31,7 @@ public:
 	virtual u8* lock() = 0;
 	virtual void unlock() = 0;
 	virtual u32 CopyCanvans(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel);
+	virtual CANVANS_TYPE getCanvansType() const = 0;
 public:
 	s32 m_Width,m_Height;
 	s32 m_pitch;

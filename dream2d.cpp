@@ -15,8 +15,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #ifdef DREAM2D_WIN32
 #include "CDreamDeviceWin32.h"
 CDreamDeviceWin32* createDeviceWin32(DRIVER_TYPE driver_type,u32 uWidth,u32 uHeight,COLOR_FORMAT f) {
-	CDreamDeviceWin32* pDevice = new CDreamDeviceWin32(uWidth,uHeight);
-	pDevice->initDriver(driver_type,f);
+	CDreamDeviceWin32* pDevice = new CDreamDeviceWin32(driver_type,uWidth,uHeight);
 	return pDevice;
 }
 #else

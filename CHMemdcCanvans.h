@@ -19,54 +19,58 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 class CWinGUIDriver;
 class CHMemdcCanvans :public ICanvans {
 public:
-	CHdcCanvans(HWND hwnd,s32 sWidth,s32 sHeight):ICanvans(COLOR_A8R8G8B8) {
+	CHMemdcCanvans(HWND hwnd,s32 sWidth,s32 sHeight):ICanvans(COLOR_A8R8G8B8) {
 		HDC hdc = GetDC(hwnd);
 		m_hDc = CreateCompatibleDC(hdc);
+		BITMAPINFOHEADER dibheader;
 		BITMAPINFOHEADER *pbmiDIB = ( BITMAPINFOHEADER * ) &dibheader;
 
 		memset( &dibheader, 0, sizeof( dibheader ) );
-		m_pitch = (sWidth*32 +31)>>5;
+		m_pitch = ((sWidth*32 +31)>>5)<<2;
 		m_Width = (u32)sWidth;
 		m_Height = (u32)sHeight;
-		pbmiDIB->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
-		pbmiDIB->bmiHeader.biWidth         = sWidth;
-		pbmiDIB->bmiHeader.biHeight        = sHeight;
-		pbmiDIB->bmiHeader.biPlanes        = 1;
-		pbmiDIB->bmiHeader.biBitCount      = 32;
-		pbmiDIB->bmiHeader.biCompression   = BI_RGB;
-		pbmiDIB->bmiHeader.biSizeImage     = 0;
-		pbmiDIB->bmiHeader.biXPelsPerMeter = 0;
-		pbmiDIB->bmiHeader.biYPelsPerMeter = 0;
-		pbmiDIB->bmiHeader.biClrUsed       = 256;
-		pbmiDIB->bmiHeader.biClrImportant  = 256;
+		pbmiDIB->biSize          = sizeof(BITMAPINFOHEADER);
+		pbmiDIB->biWidth         = sWidth;
+		pbmiDIB->biHeight        = sHeight;
+		pbmiDIB->biPlanes        = 1;
+		pbmiDIB->biBitCount      = 32;
+		pbmiDIB->biCompression   = BI_RGB;
+		pbmiDIB->biSizeImage     = 0;
+		pbmiDIB->biXPelsPerMeter = 0;
+		pbmiDIB->biYPelsPerMeter = 0;
+		pbmiDIB->biClrUsed       = 256;
+		pbmiDIB->biClrImportant  = 256;
 
-		void* pbuffer;
+		u8* pbuffer;
 		m_hDIBSection = CreateDIBSection( hdc,
-		                                  pbmiDIB,
+		                                  (BITMAPINFO*)pbmiDIB,
 		                                  DIB_RGB_COLORS,
 		                                  (void**)&pbuffer,
 		                                  NULL,
 		                                  0 );
-		if ( pbmiDIB->bmiHeader.biHeight > 0 ) {
+		if ( pbmiDIB->biHeight > 0 ) {
 			m_buffer	= pbuffer + ( sHeight - 1 ) * sWidth * 4;
-			pitch		= -pitch;
+			m_pitch		= -m_pitch;
 		} else {
 			m_buffer	= pbuffer;
 		}
 		memset(pbuffer, 0xff, sWidth *sHeight*4 );
-		SeleteObject(m_hDc,m_hDIBSection);
+		SelectObject(m_hDc,m_hDIBSection);
 		ReleaseDC(hwnd,hdc);
 		SetBkMode(m_hDc,TRANSPARENT);
 	}
-	virtual ~CHdcCanvans() {
+	virtual ~CHMemdcCanvans() {
 		if(m_hDc) {
-			DeleteDc(m_hDc);
+			DeleteDC(m_hDc);
 			m_hDc = NULL;
 		}
 		if(m_hDIBSection) {
 			DeleteObject(m_hDIBSection);
 			m_hDIBSection = NULL;
 		}
+	}
+	u32* getPallet() const {
+		return NULL;
 	}
 	u8* lock() {
 		return m_buffer;
@@ -76,6 +80,18 @@ public:
 	}
 	HDC getMemDc() const {
 		return m_hDc;
+	}
+	CANVANS_TYPE getCanvansType() const {
+		return CANVANS_WINGDI;
+	}
+	u32 CopyCanvans(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) {
+		if (source->getCanvansType() == CANVANS_WINGDI&&sel == COPY_NORMAL)
+		{
+			BitBlt(m_hDc,x0,y0,sWidth,sHeight,((CHMemdcCanvans*)source)->getMemDc(),sx0,sy0,SRCCOPY);
+		}else {
+			return ICanvans::CopyCanvans(x0,y0,sWidth,sHeight,source,sx0,sy0,sel);
+		}
+		return 0;
 	}
 	//friend class CWinGUIDriver;
 private:

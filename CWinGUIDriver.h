@@ -33,8 +33,9 @@ public:
 	u32 DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel);
 	u32 DrawTextW(wchar_t* text,int x0,int y0);
 	u32 DrawTextA(char* text,int x0,int y0);
+	ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t);
 private:
-	CHMemdcCancans* m_Canvans;
+	CHMemdcCanvans* m_Canvans;
 	HWND m_hWnd;
 };
 #endif

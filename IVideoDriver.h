@@ -13,35 +13,24 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #ifndef __D_DREAM2D_VIDEODRIVER
 #define __D_DREAM2D_VIDEODRIVER
-#include "IReferenceCounter.h"
+#include "IReferenceCounted.h"
 #include "IFont.h"
-#include "ICanvnas.h"
-class IVideoDriver:public IReferenceCounter {
+#include "ICanvans.h"
+class IVideoDriver:public IReferenceCounted {
 public:
 	IVideoDriver() {
-		m_font = NULL;
+
 	}
 
 	virtual ~IVideoDriver() {
-		if(m_font != NULL) {
-			m_font->drop();
-			m_font = NULL;
-		}
+		
 	}
 	virtual void BeginScene(d_bool clearScreen) = 0;
 	virtual void EndScene() = 0;
 	virtual u32 DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) = 0;
 	virtual u32 DrawTextW(wchar_t* text,int x0,int y0) = 0;
 	virtual u32 DrawTextA(char* text,int x0,int y0) = 0;
-	IFont* getFont() const {
-		return m_font;
-	}
-	IFont* replaceFont(IFont* font) {
-		IFont* tmp = m_font;
-		m_font = font;
-		return tmp;
-	}
-private:
-	IFont* m_font;
+	virtual ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t) = 0;
+protected:
 };
 #endif

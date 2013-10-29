@@ -13,8 +13,8 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #ifndef __D_DREAM2D_FONT
 #define __D_DREAM2D_FONT
-#include "IReferenceCounter.h"
-class IFont:public IReferenceCounter {
+#include "IReferenceCounted.h"
+class IFont:public IReferenceCounted {
 public:
 	IFont() {
 	

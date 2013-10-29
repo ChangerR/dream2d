@@ -37,15 +37,32 @@ typedef enum {
 	COLOR_R5G6B5,
 	COLOR_R8G8B8
 }COLOR_FORMAT;
-typedef sturct {
-	union {
-		struct {
+typedef struct _color{
+	union _color_t{
+		struct _color_argb{
 			u8 a,r,g,b;
 		};
 		u32 argb;
 		u32 M[4];
 	};
 }color32;
+typedef enum {
+	COPY_USE_SOURCE_KEY,
+	COPY_USE_DEST_KEY,
+	COPY_USE_ALPHA_NORMAL,
+	COPY_USE_ALPHA_SOURCEKEY,
+	COPY_USE_ALPHA_DESKKEY,
+	COPY_NORMAL
+}COPY_SELECTION;
+typedef enum {
+	CANVANS_WINGDI,
+	CANVANS_MEMORY,
+	CANVANS_D9SURFACE,
+	CANVANS_DDRAWSURFACE,
+	CANVANS_UNKNOWN,
+	CANVANS_DEFAULT
+	//FIXME:you can add your own canvans type
+}CANVANS_TYPE;
 #include <stdlib.h>
 #include <tchar.h>
 #include <string.h>

@@ -37,7 +37,11 @@ public:
 	virtual void showVersion() const = 0;
 	virtual char* getVersionString() const = 0;
 	virtual s32 run() = 0;
-private:
+	virtual void yield() = 0;
+	IVideoDriver* getVideoDriver() const {
+		return m_videoDriver;
+	}
+protected:
 	DEVICE_TYPE m_DeviceType;
 	IVideoDriver* m_videoDriver;
 };

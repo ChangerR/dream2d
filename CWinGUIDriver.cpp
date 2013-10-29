@@ -12,12 +12,13 @@ You should have received a copy of the GNU General Public License al
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
 #include "CWinGUIDriver.h"
+#include "CMemoryCancans.h"
 #ifdef DREAM2D_WIN32
 void CWinGUIDriver::BeginScene(d_bool clearScreen) {
 	if(clearScreen == d_false) 
 		return;
 	u8* buf = m_Canvans->lock();
-	for(int i = 0;i < m_Canvans->m_Hieght;i++) {
+	for(int i = 0;i < m_Canvans->m_Height;i++) {
 		memset(buf,0xff,m_Canvans->m_pitch > 0?m_Canvans->m_pitch:-m_Canvans->m_pitch);
 		buf+=m_Canvans->m_pitch;
 	}
@@ -31,11 +32,28 @@ void CWinGUIDriver::EndScene() {
 u32 CWinGUIDriver::DrawPic(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) {	
 	return m_Canvans->CopyCanvans(x0,y0,sWidth,sHeight,source,sx0,sy0,sel);
 }
-u32 DrawTextW(wchar_t* text,int x0,int y0) {
-	return !TextOutW(m_Canvans->getMemDc(),x0,y0,text,wcslen(text);
+u32 CWinGUIDriver::DrawTextW(wchar_t* text,int x0,int y0) {
+	return !TextOutW(m_Canvans->getMemDc(),x0,y0,text,wcslen(text));
 }
-u32 DrawTextA(char* text,int x0,int y0) {
-	return !TextOutA(m_Canvans->getMemDc(),x0,y0,text,wcslen(text);
+u32 CWinGUIDriver::DrawTextA(char* text,int x0,int y0) {
+	return !TextOutA(m_Canvans->getMemDc(),x0,y0,text,strlen(text));
+}
+
+ICanvans* CWinGUIDriver::CreateCanvans( s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t )
+{
+	ICanvans* pCanvans = NULL;
+	switch(t) {
+	case CANVANS_WINGDI:
+	case CANVANS_DEFAULT:
+		pCanvans = new CHMemdcCanvans(m_hWnd,sWidth,sHeight);
+		break;
+	case CANVANS_MEMORY:
+		pCanvans = new CMemoryCanvans(sWidth,sHeight,f);
+		break;
+	default:
+		break;
+	}
+	return pCanvans;
 }
 
 #endif

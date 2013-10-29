@@ -1,6 +1,6 @@
 #This file is for window visual studio 10.0 
 #you can use "nmake -f Makefile"
-DREAM2D_OBJ=CDreamDevice.obj CDreamDeviceWin32.obj dream2d.obj
+DREAM2D_OBJ=CDreamDevice.obj CDreamDeviceWin32.obj dream2d.obj CWinGUIDriver.obj
 TARGET_PATH=
 CXXINCS =
 CPPFLAGS = $(CXXINCS) /DBUILD_DLL /nologo /c /O2 /MT /D_WIN32 /DNDEBUG /D_WINDOWS /DDREAM2D_WIN32 /I./

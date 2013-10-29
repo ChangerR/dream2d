@@ -38,7 +38,7 @@ u32 CopyCanvansNormal(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanva
 		if(source->m_Format == COLOR_A8R8G8B8) {
 			s_buf += sy0*source->m_pitch + (sx0<<2);
 			for(int i = 0; i < sHeight; i++) {
-				memcpy(d_buf,s_buf,sWidth);
+				memcpy(d_buf,s_buf,sWidth<<2);
 				d_buf+=dest->m_pitch;
 				s_buf+=source->m_pitch;
 			}
@@ -58,7 +58,7 @@ u32 CopyCanvansNormal(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanva
 			s_buf += sy0*source->m_pitch + sx0;
 			for(int i = 0;i<sWidth;i++) {
 				for(int j = 0;j <sHeight;j++) {
-					*((int*)d_buf + j) = *(source->getPallet + *(s_buf+j));
+					*((int*)d_buf + j) = *(source->getPallet() + *(s_buf+j));
 				}
 				d_buf+=dest->m_pitch;
 				s_buf+=source->m_pitch;
@@ -67,7 +67,6 @@ u32 CopyCanvansNormal(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanva
 	} else {
 
 	}
-endf:
 	source->unlock();
 	dest->unlock();
 	return nRet;
@@ -87,16 +86,18 @@ u32 CopyCanvansAlphaWithKey(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,
 u32 ICanvans::CopyCanvans(s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,COPY_SELECTION sel) {
 	switch(sel) {
 	case COPY_USE_SOURCE_KEY:
-		return CopyCanvansUseKey(dest,x0,y0,sWidth,sHeight,source,sx0,sy0,source->m_colorkey);
+		return CopyCanvansUsekey(this,x0,y0,sWidth,sHeight,source,sx0,sy0,source->m_colorkey);
 	case COPY_USE_DEST_KEY:
-		return CopyCanvansUseKey(dest,x0,y0,sWidth,sHeight,source,sx0,sy0,dest->m_colorkey);
+		return CopyCanvansUsekey(this,x0,y0,sWidth,sHeight,source,sx0,sy0,this->m_colorkey);
 	case COPY_USE_ALPHA_NORMAL:
-		return return CopyCanvansAlpha(dest,x0,y0,sWidth,sHeight,source,sx0,sy0);
+		return CopyCanvansAlpha(this,x0,y0,sWidth,sHeight,source,sx0,sy0);
 	case COPY_USE_ALPHA_SOURCEKEY:
-		return CopyCanvansAlphaWithKey(dest,x0,y0,sWidth,sHeight,source,sx0,sy0,source->m_colorkey);
+		return CopyCanvansAlphaWithKey(this,x0,y0,sWidth,sHeight,source,sx0,sy0,source->m_colorkey);
 	case COPY_USE_ALPHA_DESKKEY:
-		return CopyCanvansAlphaWithKey(dest,x0,y0,sWidth,sHeight,source,sx0,sy0,dest->m_colorkey);
+		return CopyCanvansAlphaWithKey(this,x0,y0,sWidth,sHeight,source,sx0,sy0,this->m_colorkey);
 	case COPY_NORMAL:
-		return return CopyCanvansNORMAL(dest,x0,y0,sWidth,sHeight,source,sx0,sy0);
+		return CopyCanvansNormal(this,x0,y0,sWidth,sHeight,source,sx0,sy0);
+	default:
+		return 1;
 	}
 }
