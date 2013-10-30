@@ -93,6 +93,24 @@ public:
 		}
 		return 0;
 	}
+	u32 LoadColorKey(s32 xPos,s32 yPos) {
+		if (m_buffer == NULL)
+		{
+			m_colorkey = 0;
+		}else {
+			switch(ICanvans::m_Format) {
+			case COLOR_A8R8G8B8:
+				m_colorkey = *(u32*)(m_buffer + yPos*m_pitch + xPos*4);
+				break;
+			case COLOR_R8G8B8:
+				m_colorkey = *(m_buffer + yPos*m_pitch + xPos*3) + ((*(m_buffer + yPos*m_pitch + xPos*3+1))<<8) +((*(m_buffer + yPos*m_pitch + xPos*3+2))<<16);
+				break;
+			default:
+				m_colorkey = 0;
+			}
+		}
+		return m_colorkey;
+	}
 	//friend class CWinGUIDriver;
 private:
 	HDC m_hDc;

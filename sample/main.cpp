@@ -22,15 +22,21 @@ int WINAPI WinMain(
 	}
 	IDreamDevice* pDevice  = createDevice2(DRIVER_GUIWIN32,640,480);
 	IVideoDriver* videoDriver = pDevice->getVideoDriver();
-	ICanvans* pCanvans = videoDriver->CreateCanvans(100,100,COLOR_A8R8G8B8,CANVANS_MEMORY);
-	u8* buf = pCanvans->lock();
-	memset(buf,0,pCanvans->m_Height*pCanvans->m_pitch);
-	pCanvans->unlock();
+	ICanvans* pCanvans = videoDriver->LoadCanvans("ml.bmp");
+	if (pCanvans == NULL)
+	{
+		MessageBoxA(NULL,"¼ÓÔØÎÄ¼þÊ§°Ü","error",MB_OK);
+		PostQuitMessage(0);
+	}
+	pCanvans->LoadColorKey(0,0);
 	while (pDevice->run())
 	{
 		videoDriver->BeginScene(d_false);
 			videoDriver->DrawTextW(L"HELLO WORLD!!!",100,100);
-			videoDriver->DrawPic(0,0,50,50,pCanvans,0,0,COPY_NORMAL);
+			if (pCanvans)
+			{
+				videoDriver->DrawPic(0,0,pCanvans->m_Width,pCanvans->m_Height,pCanvans,0,0,COPY_USE_SOURCE_KEY);
+			}		
 		videoDriver->EndScene();
 		pDevice->yield();
 	}

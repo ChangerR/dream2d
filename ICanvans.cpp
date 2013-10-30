@@ -76,7 +76,60 @@ u32 CopyCanvansAlpha(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvan
 	return 1;
 }
 u32 CopyCanvansUsekey(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,u32 key) {
+	if(FixBound(dest,x0,y0,sWidth,sHeight,source,sx0,sy0) == d_false)
+		return 1;
+	u8* s_buf = source->lock();
+	u8* d_buf = dest->lock();
+	int nRet = 0;
+	if(dest->m_Format == COLOR_A8R8G8B8) {
+		d_buf += y0*dest->m_pitch + (x0<<2);
+		if(source->m_Format == COLOR_A8R8G8B8) {
+			s_buf += sy0*source->m_pitch + (sx0<<2);
+			for(int i = 0; i < sHeight; i++) {
+				for (int j = 0;j < sWidth;j++)
+				{
+					if(*((u32*)s_buf + j) != key) {
+						*((u32*)d_buf + j) = *((u32*)s_buf + j);
+					}
+				}
+				d_buf += dest->m_pitch;
+				s_buf += source->m_pitch;
+			}
+		} else if(source->m_Format == COLOR_R8G8B8) {
+			s_buf += sy0*source->m_pitch + sx0*3;
+			for(int i = 0; i < sHeight; i++) {
+				for(int j = 0; j <sWidth; j++) {
+					if(s_buf[j*3] != (key&0x000000ff) ||
+						s_buf[j*3 +1] != (key&0x0000ff00)>>8 ||
+						s_buf[j*3 +2] != (key&0x00ff0000)>>16) {
+					d_buf[j*4] = s_buf[j*3];
+					d_buf[j*4+1] = s_buf[j*3+1];
+					d_buf[j*4+2] = s_buf[j*3+2];
+					d_buf[j*4+3] = 0xff;
+					}
+				}
+				d_buf+=dest->m_pitch;
+				s_buf+=source->m_pitch;
+			}
+		} else if(source->m_Format == COLOR_INDEX8){
+			s_buf += sy0*source->m_pitch + sx0;
+			for(int i = 0;i<sWidth;i++) {
+				for(int j = 0;j <sHeight;j++) {
+					if (*(source->getPallet() + *(s_buf+j)) != key)
+					{
+						*((int*)d_buf + j) = *(source->getPallet() + *(s_buf+j));
+					}			
+				}
+				d_buf+=dest->m_pitch;
+				s_buf+=source->m_pitch;
+			}
+		}
+	} else {
 
+	}
+	source->unlock();
+	dest->unlock();
+	return nRet;
 	return 1;
 }
 u32 CopyCanvansAlphaWithKey(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,u32 key) {

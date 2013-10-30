@@ -25,6 +25,9 @@ public:
 		case COLOR_INDEX8:
 			bitCount = 8;
 			break;
+		case COLOR_R8G8B8:
+			bitCount = 24;
+			break;
 		case COLOR_A1R5G5B5:
 		case COLOR_R5G6B5:
 			bitCount = 16;
@@ -59,7 +62,25 @@ public:
 		return CANVANS_MEMORY;
 	}
 	u32* getPallet() const{
-		return NULL;
+		return m_pallet;
+	}
+	u32 LoadColorKey(s32 xPos,s32 yPos) {
+		if (m_buffer == NULL)
+		{
+			m_colorkey = 0;
+		}else {
+			switch(ICanvans::m_Format) {
+			case COLOR_A8R8G8B8:
+				m_colorkey = *(u32*)(m_buffer + yPos*m_pitch + xPos*4);
+				break;
+			case COLOR_R8G8B8:
+				m_colorkey = *(m_buffer + yPos*m_pitch + xPos*3) + ((*(m_buffer + yPos*m_pitch + xPos*3+1))<<8) +((*(m_buffer + yPos*m_pitch + xPos*3+2))<<16);
+				break;
+			default:
+				m_colorkey = 0;
+			}
+		}
+		return m_colorkey;
 	}
 private:
 	u8* m_buffer;

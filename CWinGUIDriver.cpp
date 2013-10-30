@@ -13,6 +13,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #include "CWinGUIDriver.h"
 #include "CMemoryCancans.h"
+#include "CCanvansLoader.h"
 #ifdef DREAM2D_WIN32
 void CWinGUIDriver::BeginScene(d_bool clearScreen) {
 	if(clearScreen == d_false) 
@@ -56,4 +57,7 @@ ICanvans* CWinGUIDriver::CreateCanvans( s32 sWidth,s32 sHeight,COLOR_FORMAT f,CA
 	return pCanvans;
 }
 
+ICanvans* CWinGUIDriver::LoadCanvans(const char* filename) {
+	return CCanvansLoader::LoadBmpFile(filename);
+}
 #endif

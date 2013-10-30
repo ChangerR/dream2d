@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCanvansLoader.h" />
     <ClInclude Include="CDreamDeviceWin32.h" />
     <ClInclude Include="CHMemdcCanvans.h" />
     <ClInclude Include="CMemoryCancans.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="IVideoDriver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCanvansLoader.cpp" />
     <ClCompile Include="CDreamDevice.cpp" />
     <ClCompile Include="CDreamDeviceWin32.cpp" />
     <ClCompile Include="CWinGUIDriver.cpp" />

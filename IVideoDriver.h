@@ -31,6 +31,7 @@ public:
 	virtual u32 DrawTextW(wchar_t* text,int x0,int y0) = 0;
 	virtual u32 DrawTextA(char* text,int x0,int y0) = 0;
 	virtual ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t) = 0;
+	virtual ICanvans* LoadCanvans(const char*) = 0;
 protected:
 };
 #endif
