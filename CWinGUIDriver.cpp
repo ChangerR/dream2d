@@ -20,7 +20,7 @@ void CWinGUIDriver::BeginScene(d_bool clearScreen) {
 		return;
 	u8* buf = m_Canvans->lock();
 	for(int i = 0;i < m_Canvans->m_Height;i++) {
-		memset(buf,0xff,m_Canvans->m_pitch > 0?m_Canvans->m_pitch:-m_Canvans->m_pitch);
+		memset(buf,0x0,m_Canvans->m_pitch > 0?m_Canvans->m_pitch:-m_Canvans->m_pitch);
 		buf+=m_Canvans->m_pitch;
 	}
 	m_Canvans->unlock();
@@ -60,4 +60,28 @@ ICanvans* CWinGUIDriver::CreateCanvans( s32 sWidth,s32 sHeight,COLOR_FORMAT f,CA
 ICanvans* CWinGUIDriver::LoadCanvans(const char* filename) {
 	return CCanvansLoader::LoadBmpFile(filename);
 }
+
+u32 CWinGUIDriver::DrawRectAngle( s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color )
+{	
+	x0 = x0 > 0 ? x0:(sWidth+=x0,0);
+	y0 = y0 > 0 ? y0:(sHeight+=y0,0);	
+	sWidth = (x0 + sWidth) > m_Canvans->m_Width ? (m_Canvans->m_Width - x0):sWidth;
+	sHeight = (y0 + sHeight) >m_Canvans->m_Height ? (m_Canvans->m_Height - y0):sHeight;
+	if(x0 >= m_Canvans->m_Width || y0 >= m_Canvans->m_Height||sWidth <= 0||sHeight <= 0)
+		return 0;
+	u8* buf = m_Canvans->lock();
+	u32 alpha = (color >> 24) + 1;
+	buf += m_Canvans->m_pitch*y0 + x0*4;
+	for (int i = 0; i < sHeight;i++)
+	{
+		for(int j = 0;j < sWidth;j++) {
+			*(buf + 4*j) = (*(buf + 4*j)*(256 - alpha) + (color&0x000000ff)* alpha) >>8;
+			*(buf + 4*j + 1) = (*(buf + 4*j + 1)*(256 - alpha) + ((color&0x0000ff00)>>8)* alpha) >>8;
+			*(buf + 4*j + 2) = (*(buf + 4*j + 2)*(256 - alpha) + ((color&0x00ff0000)>>16)* alpha) >>8;
+		}
+		buf += m_Canvans->m_pitch;
+	}
+	m_Canvans->unlock();
+}
+
 #endif

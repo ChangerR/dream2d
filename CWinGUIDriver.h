@@ -35,6 +35,7 @@ public:
 	u32 DrawTextA(char* text,int x0,int y0);
 	ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t);
 	ICanvans* LoadCanvans(const char*);
+	u32 DrawRectAngle(s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color);
 private:
 	CHMemdcCanvans* m_Canvans;
 	HWND m_hWnd;

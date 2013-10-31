@@ -29,14 +29,18 @@ int WINAPI WinMain(
 		PostQuitMessage(0);
 	}
 	pCanvans->LoadColorKey(0,0);
+	int x,y;
+	pDevice->setWindowCaption(L"Demo1");
 	while (pDevice->run())
 	{
-		videoDriver->BeginScene(d_false);
+		videoDriver->BeginScene(d_true);
 			videoDriver->DrawTextW(L"HELLO WORLD!!!",100,100);
 			if (pCanvans)
 			{
-				videoDriver->DrawPic(0,0,pCanvans->m_Width,pCanvans->m_Height,pCanvans,0,0,COPY_USE_SOURCE_KEY);
-			}		
+				videoDriver->DrawPic(0,0,pCanvans->m_Width,pCanvans->m_Height,pCanvans,0,0,COPY_USE_ALPHA_NORMAL);
+			}
+			pDevice->getCursorControl()->getPosition(&x,&y);
+			videoDriver->DrawRectAngle(x-50,y-50,100,100,0x1fffffff);
 		videoDriver->EndScene();
 		pDevice->yield();
 	}

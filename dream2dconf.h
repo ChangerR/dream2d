@@ -63,6 +63,16 @@ typedef enum {
 	CANVANS_DEFAULT
 	//FIXME:you can add your own canvans type
 }CANVANS_TYPE;
+
+template <typename T>
+struct point2d {
+	T x,y;
+};
+
+template <typename T>
+struct rect {
+	T top,left,right,bottom;
+};
 #include <stdlib.h>
 #include <tchar.h>
 #include <string.h>

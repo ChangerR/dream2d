@@ -11,3 +11,24 @@ General Public License for more details.  
 You should have received a copy of the GNU General Public License along with this program; if not,
 write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, US
 ******************************************************************************************************/
+#ifndef __D_DREAM2D_ICOUSORCONTROL
+#define __D_DREAM2D_ICOUSORCONTROL
+#include "dream2dconf.h"
+class ICursorControl:public IReferenceCounted {
+public:
+	ICursorControl() {
+	
+	}
+	virtual ~ICursorControl() {
+	
+	}
+	virtual void setVisible(d_bool visible) = 0;
+	
+	virtual d_bool isVisible() const = 0;
+	
+	virtual void setPosition(s32 x, s32 y) = 0;
+	
+	virtual void getPosition(s32* x,s32* y) = 0;
+	//virtual void setActiveIcon(ECURSOR_ICON iconId) = 0;
+};
+#endif

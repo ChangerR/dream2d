@@ -51,6 +51,9 @@
     <ClInclude Include="CCanvansLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ICursorControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CWinGUIDriver.cpp">
@@ -63,9 +66,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="dream2d.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CDreamDevice.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CCanvansLoader.cpp">

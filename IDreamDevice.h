@@ -15,6 +15,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #define __D_CDREAMDEVICE_H
 #include "IReferenceCounted.h"
 #include "IVideoDriver.h"
+#include "ICursorControl.h"
 class IDreamDevice:public IReferenceCounted {
 public:
 	typedef enum {
@@ -41,6 +42,12 @@ public:
 	IVideoDriver* getVideoDriver() const {
 		return m_videoDriver;
 	}
+	virtual ICursorControl* getCursorControl() const = 0;
+	virtual void sleep(u32 t) = 0;
+	virtual void setWindowCaption(const wchar_t* text) = 0;
+	virtual bool isWindowActive() const = 0;
+	virtual bool isWindowFocused() const = 0;
+	virtual bool isFullscreen() const = 0;
 protected:
 	DEVICE_TYPE m_DeviceType;
 	IVideoDriver* m_videoDriver;

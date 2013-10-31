@@ -13,8 +13,8 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ******************************************************************************************************/
 #include "ICanvans.h"
 d_bool FixBound(ICanvans* dest,s32& x0,s32& y0,s32& sWidth,s32& sHeight,ICanvans* source,s32& sx0,s32& sy0) {
-	x0 = x0 > 0 ? x0:0;
-	y0 = y0 > 0 ? y0:0;
+	x0 = x0 > 0 ? x0:(sWidth+=x0,0);
+	y0 = y0 > 0 ? y0:(sHeight+=y0,0);
 	sWidth = (x0 + sWidth) > dest->m_Width ? (dest->m_Width - x0):sWidth;
 	sHeight = (y0 + sHeight) >dest->m_Height ? (dest->m_Height - y0):sHeight;
 	sWidth = (sx0 + sWidth) > source->m_Width ? (source->m_Width - sx0):sWidth;
@@ -27,6 +27,13 @@ d_bool FixBound(ICanvans* dest,s32& x0,s32& y0,s32& sWidth,s32& sHeight,ICanvans
 	return d_true;
 }
 
+//Ok,I admit that this code is a bit ugly
+inline void Alpha_Mix(u32* a,u32* b) {
+	u32 alpha1 = *((u8*)b + 3) + 1,alpha2 = 256 - alpha1;
+	*((u8*)a) = u8(((u32)(*((u8*)a)) * alpha2 + (u32)(*((u8*)b)) * alpha1)>>8);
+	*((u8*)a+1) = u8(((u32)(*((u8*)a+1)) * alpha2 + (u32)(*((u8*)b+1)) * alpha1)>>8);
+	*((u8*)a+2) = u8(((u32)(*((u8*)a+2)) * alpha2 + (u32)(*((u8*)b+2)) * alpha1)>>8);
+}
 u32 CopyCanvansNormal(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0) {
 	if(FixBound(dest,x0,y0,sWidth,sHeight,source,sx0,sy0) == d_false)
 		return 1;
@@ -71,9 +78,31 @@ u32 CopyCanvansNormal(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanva
 	dest->unlock();
 	return nRet;
 }
-u32 CopyCanvansAlpha(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0) {
 
-	return 1;
+u32 CopyCanvansAlpha(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0) {
+	int nRet = 0;
+	if (dest->m_Format == COLOR_A8R8G8B8&& source->m_Format == COLOR_A8R8G8B8)
+	{
+		if(FixBound(dest,x0,y0,sWidth,sHeight,source,sx0,sy0) == d_false)
+			return 1;
+		u8* s_buf = source->lock();
+		u8* d_buf = dest->lock();
+		d_buf += y0*dest->m_pitch + (x0<<2);
+		s_buf += sy0*source->m_pitch + (sx0<<2);
+
+		for(int i = 0;i < sHeight;i++) {
+			for(int j=0;j < sWidth;j++) {
+				Alpha_Mix((u32*)d_buf + j,(u32*)s_buf + j);
+			}
+			d_buf+=dest->m_pitch;
+			s_buf+=source->m_pitch;
+		}
+		source->unlock();
+		dest->unlock();
+	}else {
+		return CopyCanvansNormal(dest,x0,y0,sWidth,sHeight,source,sx0,sy0);
+	}
+	return nRet;
 }
 u32 CopyCanvansUsekey(ICanvans* dest,s32 x0,s32 y0,s32 sWidth,s32 sHeight,ICanvans* source,s32 sx0,s32 sy0,u32 key) {
 	if(FixBound(dest,x0,y0,sWidth,sHeight,source,sx0,sy0) == d_false)

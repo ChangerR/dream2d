@@ -32,6 +32,7 @@ public:
 	virtual u32 DrawTextA(char* text,int x0,int y0) = 0;
 	virtual ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t) = 0;
 	virtual ICanvans* LoadCanvans(const char*) = 0;
+	virtual u32 DrawRectAngle(s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color) = 0;
 protected:
 };
 #endif

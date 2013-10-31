@@ -82,6 +82,7 @@
     <ClInclude Include="dream2d.h" />
     <ClInclude Include="dream2dconf.h" />
     <ClInclude Include="ICanvans.h" />
+    <ClInclude Include="ICursorControl.h" />
     <ClInclude Include="IDreamDevice.h" />
     <ClInclude Include="IFont.h" />
     <ClInclude Include="IReferenceCounted.h" />
@@ -89,7 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCanvansLoader.cpp" />
-    <ClCompile Include="CDreamDevice.cpp" />
     <ClCompile Include="CDreamDeviceWin32.cpp" />
     <ClCompile Include="CWinGUIDriver.cpp" />
     <ClCompile Include="dream2d.cpp" />
