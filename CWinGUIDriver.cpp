@@ -14,6 +14,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #include "CWinGUIDriver.h"
 #include "CMemoryCancans.h"
 #include "CCanvansLoader.h"
+#include "CCanvansTool.h"
 #ifdef DREAM2D_WIN32
 void CWinGUIDriver::BeginScene(d_bool clearScreen) {
 	if(clearScreen == d_false) 
@@ -68,7 +69,7 @@ u32 CWinGUIDriver::DrawRectAngle( s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color
 	sWidth = (x0 + sWidth) > m_Canvans->m_Width ? (m_Canvans->m_Width - x0):sWidth;
 	sHeight = (y0 + sHeight) >m_Canvans->m_Height ? (m_Canvans->m_Height - y0):sHeight;
 	if(x0 >= m_Canvans->m_Width || y0 >= m_Canvans->m_Height||sWidth <= 0||sHeight <= 0)
-		return 0;
+		return 1;
 	u8* buf = m_Canvans->lock();
 	u32 alpha = (color >> 24) + 1;
 	buf += m_Canvans->m_pitch*y0 + x0*4;
@@ -82,6 +83,19 @@ u32 CWinGUIDriver::DrawRectAngle( s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color
 		buf += m_Canvans->m_pitch;
 	}
 	m_Canvans->unlock();
+	return 0;
+}
+
+u32 CWinGUIDriver::DrawLine( s32 x0,s32 y0,s32 x1,s32 y1,u32 color )
+{
+	/*
+	POINT pt;	
+		::MoveToEx(this->m_Canvans->getMemDc(),x0,y0,&pt);
+		::LineTo(this->m_Canvans->getMemDc(),x1,y1);
+		::MoveToEx(this->m_Canvans->getMemDc(),pt.x,pt.y,&pt);*/
+	
+	return CCanvansTool::DrawLine2(m_Canvans,x0,y0,x1,y1,color);
 }
 
 #endif
+

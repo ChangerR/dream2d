@@ -22,7 +22,7 @@ int WINAPI WinMain(
 	}
 	IDreamDevice* pDevice  = createDevice2(DRIVER_GUIWIN32,640,480);
 	IVideoDriver* videoDriver = pDevice->getVideoDriver();
-	ICanvans* pCanvans = videoDriver->LoadCanvans("../media/ml.bmp");
+	ICanvans* pCanvans = videoDriver->LoadCanvans("a.bmp");
 	if (pCanvans == NULL)
 	{
 		MessageBoxA(NULL,"¼ÓÔØÎÄ¼þÊ§°Ü","error",MB_OK);
@@ -35,10 +35,14 @@ int WINAPI WinMain(
 	{
 		videoDriver->BeginScene(d_true);
 			videoDriver->DrawTextW(L"HELLO WORLD!!!",100,100);
+			/*
 			if (pCanvans)
 			{
-				videoDriver->DrawPic(0,0,pCanvans->m_Width,pCanvans->m_Height,pCanvans,0,0,COPY_USE_ALPHA_NORMAL);
+				videoDriver->DrawPic(0,0,pCanvans->m_Width,pCanvans->m_Height,pCanvans,0,0,COPY_USE_SOURCE_KEY);
 			}
+			
+			*/
+			videoDriver->DrawLine(100,200,400,400,0x00ff00ff);
 			pDevice->getCursorControl()->getPosition(&x,&y);
 			videoDriver->DrawRectAngle(x-50,y-50,100,100,0x1fffffff);
 		videoDriver->EndScene();

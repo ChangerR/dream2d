@@ -36,6 +36,19 @@ public:
 	ICanvans* CreateCanvans(s32 sWidth,s32 sHeight,COLOR_FORMAT f,CANVANS_TYPE t);
 	ICanvans* LoadCanvans(const char*);
 	u32 DrawRectAngle(s32 x0,s32 y0,s32 sWidth,s32 sHeight,u32 color);
+	u32 DrawLine(s32 x0,s32 y0,s32 x1,s32 y1,u32 color);
+	ICanvans* getBackRenderTarget() const {
+		return m_Canvans;
+	}
+	ICanvans* setRenderTarget(ICanvans* p) {
+		if (p->getCanvansType() != CANVANS_WINGDI)
+		{
+			return NULL;
+		}
+		ICanvans* tmp = m_Canvans;
+		m_Canvans = (CHMemdcCanvans*)p;
+		return tmp;
+	}
 private:
 	CHMemdcCanvans* m_Canvans;
 	HWND m_hWnd;

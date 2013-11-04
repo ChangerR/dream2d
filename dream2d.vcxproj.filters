@@ -54,6 +54,9 @@
     <ClInclude Include="ICursorControl.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CCanvansTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CWinGUIDriver.cpp">
@@ -69,6 +72,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CCanvansLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CCanvansTool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

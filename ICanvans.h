@@ -14,7 +14,7 @@ write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 #ifndef __D_DREAM2D_CANVANS
 #define __D_DREAM2D_CANVANS
 #include "IReferenceCounted.h"
-
+class CCanvansTool;
 class ICanvans:public IReferenceCounted{
 public:
 	ICanvans(COLOR_FORMAT f) {
@@ -38,5 +38,6 @@ public:
 	s32 m_pitch;
 	COLOR_FORMAT m_Format;
 	u32 m_colorkey;
+	friend class CCanvansTool;
 };
 #endif
