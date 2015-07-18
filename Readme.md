@@ -5,12 +5,12 @@ Dream2d
 
 编译
 --------
-#可是使用vistual studio 2013 直接编译
-#或者使用 
+1.可是使用vistual studio 2013 直接编译
+2.直接使用nmake编译
 ```Bash
 nmake -f Makefile
 ```
 <BR>
 Demo
 ----------
-![](https://github.com/MysteriousChanger/dream2d/tree/master/sample/demo.png)  
+![](https://github.com/MysteriousChanger/dream2d/blob/master/sample/demo.png)  
