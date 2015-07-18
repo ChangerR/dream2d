@@ -5,7 +5,7 @@ Dream2d
 
 编译
 --------
-1.可是使用vistual studio 2013 直接编译<CR>
+1.可是使用vistual studio 2013 直接编译<BR>
 2.直接使用nmake编译
 ```Bash
 nmake -f Makefile
