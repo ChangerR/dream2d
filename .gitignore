@@ -1,2 +1,6 @@
 #ignore build.bat
 build.bat
+debug/*
+*.sdf
+*.obj
+*.exp
