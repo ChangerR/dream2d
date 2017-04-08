@@ -13,4 +13,4 @@ nmake -f Makefile
 <BR>
 Demo
 ----------
-![](https://github.com/MysteriousChanger/dream2d/blob/master/sample/demo.png)  
+![](https://github.com/ChangerR/dream2d/blob/master/sample/demo.png)  
